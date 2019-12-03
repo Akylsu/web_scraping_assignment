@@ -51,8 +51,9 @@ my_dw_news <-  function(my_start) {
   my_links <- 
     paste0('https://www.dw.com/search/en/',
            t %>%
-             html_nodes('h2')%>%
+             html_nodes('.searchResult a')%>%
              html_attr('href')
+    
     )
   return(data.frame('title'= my_article_title, 'summary'= my_body_text, 
                   'Date'= my_article_date, 'link'=my_links ))
@@ -115,9 +116,9 @@ my_dw_news2 <-  function(my_page) {
   my_links <- 
     paste0('https://www.dw.com/search/en/',
            t %>%
-             html_nodes('h2')%>%
+             html_nodes('.searchResult a')%>%
              html_attr('href')
-    )
+           )
   return(data.frame('title'= my_article_title, 'summary'= my_body_text, 
                     'Date'= my_article_date, 'link'=my_links ))
 }
@@ -126,10 +127,10 @@ my_urls <- paste0("https://www.dw.com/search/?languageCode=en&item=bundesliga&se
                   seq(from=10, to=200, by=10) )
 
 
+
 all_news_bundesliga <- rbindlist(lapply(my_urls, my_dw_news2))
 View(all_news_bundesliga)
 
 saveRDS(all_news_bundesliga, file="Deutsche Welle News on Bundesliga.Rda")
 write.csv(all_news, "dw_bundesliga_news.csv")
-
 
